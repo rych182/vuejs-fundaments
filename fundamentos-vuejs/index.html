@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" crossorigin="anonymous">
+	<style type="text/css">
+body {
+    background: #EFF8FF;
+    height: 100vh;
+    width: 100vw;
+    font-family: system-ui, BlinkMacSystemFont, -apple-system, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+}
+
+#shopping-list {
+    background: #FFF;
+    padding: 2rem;
+    margin: 1rem;
+    border-radius: 3px;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.12), 0 2px 4px 0 rgba(0,0,0,0.08);
+    width: 95%;
+    max-width: 900px;
+}
+
+h1 {
+    color: #3D4852;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+a {
+    color: #6CB2EB;
+    font-size: 1.25rem;
+    transition: all .1s ease-in;
+    margin-top: .5rem;
+    display: block;
+}
+
+a:hover {
+    color: #3490DC;
+}
+
+li, p {
+    display: flex;
+    align-items: center;
+    line-height: 1.75;
+    letter-spacing: .5px;
+    color: #3D4852;
+    font-size: 1.25rem;
+    cursor: pointer;
+    transition: all .1s ease-in;
+}
+
+li:hover {
+    color: #22292F;
+}
+
+li input {
+    margin: 0 .5rem 0;
+}
+
+#shopping-list > input, #shopping-list > select {
+    width: 100%;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+    border: 1px solid #F1F5F8;
+    color: #606F7B;
+    padding: .5rem .75rem;
+    box-sizing: border-box;
+    font-size: 1rem;
+    letter-spacing: .5px;
+    margin: .5rem 0
+}
+
+.add-item-form, .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.add-item-form input {
+    width: 70%;
+    border-radius: 3px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.10);
+    border: 1px solid #F1F5F8;
+    color: #606F7B;
+    padding: .5rem .75rem;
+    box-sizing: border-box;
+    font-size: 1rem;
+    letter-spacing: .5px;
+    margin: .5rem 0;
+}
+
+.btn {
+    border: none;
+    border-radius: 3px;
+    margin: auto 0;
+    padding: .5rem .75rem;
+    flex-shrink: 0;
+    cursor: pointer;
+    font-size: .9rem;
+    letter-spacing: .5px;
+    transition: all .1s ease-in;
+}
+
+.btn[disabled] {
+    background: #8795A1;
+}
+
+.btn[disabled]:hover {
+    background: #606F7B;
+}
+
+.btn-primary {
+    background: #6CB2EB;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: #3490DC;
+}
+
+.btn-cancel {
+    background: #EF5753;
+    color: #fff;
+}
+
+.btn-cancel:hover {
+    background: #E3342F;
+    color: #fff;
+}
+
+.strikeout {
+    text-decoration: line-through;
+    color: #B8C2CC;
+}
+
+.strikeout:hover {
+    color: #8795A1;
+}
+
+.priority {
+    color: #DE751F;
+}
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="col-12" id="shopping-List">
+				<div class="header">
+					<h2>{{header.toLocaleUpperCase()}}</h2>
+					<p>Puedes tachar los artículos que has comprado con solo dar click</p>
+					<button v-if="state === 'default'" class="btn btn-primary" @click="changeState('edit')">Agrega compras</button>
+					<button v-else class="btn btn-danger" @click="changeState('default')">Cancelar</button>	
+				</div>
+							
+
+				<div class="add-item-form" v-if="state === 'edit'">
+					<input v-model="newItem" type="text" placeholder="Add an item" @keyup.enter="saveItem">
+					<p>{{ characterCount }}/200</p>
+					<button class="btn btn-primary" :disabled="newItem.length === 0" @click="saveItem">Guardar compra</button>
+				</div>
+
+				<ul>
+					<li v-for="item in reversedItems" :class="[item.purchased ? 'strikeout' : '', item.highPriority ? 'priority' : '']" @click="togglePurchased(item)">{{ item.label }}</li>
+				</ul>
+				<p v-if="items.length === 0">Bien!Ya compraste todo!</p>
+
+			</div>
+		</div>
+	</div>
+
+
+<script type="text/javascript" src="https://unpkg.com/vue"></script>
+<script type="text/javascript">
+	var shoppingList = new Vue({
+		el: '#shopping-List',
+		data: {
+			state: 'default', 
+			header: 'Lista de compras',
+			newItem: '',
+			items: [
+				{
+					label: '10 sombreros para fiesta',
+					purchased: false,
+					highPriority: false,
+				},
+				{
+					label: 'Soda',
+					purchased: true,
+					highPriority: false,					
+				},
+				{
+					label: 'Carne asada',
+					purchased: false,
+					highPriority: true,					
+				},
+				// 'Bread',
+				// 'Tortillas',
+				// 'ham'
+			]
+		},
+		computed: {
+			characterCount(){
+				return this.newItem.length;
+			},
+			reversedItems(){
+				return this.items.slice(0).reverse();
+			}
+		},
+		methods: {//Esta wea es un nuevo objeto al igual que data, pondremos metodos que encapsulan una funcionalidad específica, el "this" lo usamos porque no tenemos acceso directo a nuestra instancia
+				saveItem: function() {
+					this.items.push({//Los items de compra
+							label: this.newItem,
+							purchased: false,
+						});
+					this.newItem = '';//Para volver a poner el formulario en blanco
+				},
+				changeState: function(newState) {
+					this.state = newState;
+					this.newItem = '';
+				},
+				togglePurchased: function(item) {
+					item.purchased = !item.purchased;
+				}
+			}
+	});
+	//shoppingList.$data.header = "Jola mundo";
+</script>
+</body>
+</html>

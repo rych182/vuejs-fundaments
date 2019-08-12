@@ -1,0 +1,133 @@
+TIPS:
+-Descargar Vue JS Devtools
+-------------------------------------------------
+Directivas
+v-model
+<input type="text" v-model= "header">
+-----------
+v-for (repite instrucciones, por eso se usa en las listas)
+<ul>
+	<li v-for="item in items">{{ item }}</li>
+</ul>
+-----------
+v-on (Sirve como un switch para activar y desactivar algo)
+<input v-model="newItem" type="text" placeholder="Add an item" v-on:keyup.enter="items.push(newItem)">
+<button class="btn btn-primary" v-on:click="items.push(newItem)">Save Item</button>
+Se puede abreviar:
+
+<input v-model="newItem" type="text" placeholder="Add an item" @keyup.enter="items.push(newItem)">
+<button class="btn btn-primary" @click="items.push(newItem)">Save Item</button>
+-----------
+v-bind (sirve para hacer validaciones)
+<button class="btn btn-primary" v-bind:disabled="newItem.length === 0" @click="saveItem">Save Item</button>
+
+Se puede abreviar así:
+<button class="btn btn-primary" :disabled="newItem.length === 0" @click="saveItem">Save Item</button>
+-----------------------------------------------------------------
+COSAS QUE NECESITO USAR RÁPIDO.
+-Agregar nuevos items en vue js
+shoppingList.$data.items.push("Ketchup");
+
+-Hacer que al dar enter se agregue algo a la lista // podemos usar las teclas tab,esc, suprimir o click derecho, cmd, focus, mouserover y mas
+<input v-model="newItem" type="text" placeholder="Add an item" v-on:keyup.enter="items.push(newItem)">
+
+-Resumir el código v-on
+<input v-model="newItem" type="text" placeholder="Add an item" v-on:keyup.enter="items.push(newItem)">
+<button class="btn btn-primary" v-on:click="items.push(newItem)">Save Item</button>
+Se puede abreviar:
+
+<input v-model="newItem" type="text" placeholder="Add an item" @keyup.enter="items.push(newItem)">
+<button class="btn btn-primary" @click="items.push(newItem)">Save Item</button>
+
+Resumir el código v-bind
+<button class="btn btn-primary" v-bind:disabled="newItem.length === 0" @click="saveItem">Save Item</button>
+
+------------------------------------------------------------------
+Vue.js Fundamentals 
+									CHAPTER 1:
+Con Vue JS los datos están enlazados en ambas vías
+
+	var shoppingList = new Vue({
+		el: '#shopping-List',
+		data: {
+			header: 'Escribe algo aquí y se mostrará al momento'
+		}
+	});
+	// Esto ponlo en la consola del navegador shoppingList.$data.header = "Jola mundo";
+
+									CHAPTER 2
+
+Vue JS solo puede renderisar una declaración a la vez dentro de las llaves dobles {{}}, lo siguiente no se puede:
+1)
+{{ header; header.toLocaleUpperCase()}}
+2)Tampoco se pueden declarar variables y usar el operador IF para mostrarla como condicional
+<h1>{{ var header = 'welcome';}}</h1>
+<h1>{{ if(header) return 'welcome'}}</h1>
+
+									Chapter 3
+<ul>
+	<li v-for="item in items">{{ item }}</li>
+</ul>
+	var shoppingList = new Vue({
+		el: '#shopping-List',
+		data: {
+			header: 'Lista de compras',
+			items: [
+				'Bread',
+				'Tortillas',
+				'ham'
+			]
+		}
+	});
+También puedes agregar items desde consola:
+shoppingList.$data.items.push("Ketchup");
+shoppingList.$data.items.pop();
+										Chapter 9
+
+Paso1: Agregar items y su estado(verdadero falso)
+Paso2: Agregarlos dentro de una función como el data en los primeros capítulos
+Paso 3: Modificar donde se mostrara(en una etiqueta html con las llaves dobles
+Paso 4: Agregar La clase dinámica( esa chingadera que
+Paso5: Decidir su usaré la sintaxis de objeto o de arreglo, la de objeto es la de llaves, es la mas sencilla y mantiene la plantilla mas limpia, pero la de arreglo
+	 es mejor por que ofrece mayor flexibilidad y control para cambiar diferentes clases
+	Sintaxis objeto: <li v-for="item in items" :class="{strikeout: item.purchased}">{{ item.label }}</li>
+	Sintaxis arreglo: <li v-for="item in items" :class="[item.purchased ? 'strikeout' : '', item.highPriority ? 'priority' : '']">{{ item.label }}</li>
+	Sintaxis arreglo: 
+
+Enlaces de atributos:
+Las clases son un caso especial debido a que podemos pasar datos adicionales, para que así puedan determinar cuando aplicar determinadas clases.
+
+										Chapter 10
+
+Propiedades computadas: Nos permiten realizar transformaciones o calculos en nuestros datos. Tecnicamente es una función que hace algo, para encapsular
+transformaciones de datos y manipulaciones, "que se mantienen sincronizados con los datos a los que hace referencia", es muy importante regresar un valor en una
+propiedad computada, porque si no, vue no sabrá cual es el valor.
+Cambiar accidentalmente un valor de datos subyacente en una propiedad computada, es una fuente de dolores de cabeza y errores
+
+TIP:
+-Cuando necesites cambiar datos, usarás metodos
+-Cuando necesites cambiar la "presentación de datos existente", usarás propiedades computadas
+
+
+
+
+
+
+Styde POO->Curso de Refactorización(LVL intermedio 10caps,94min,en proceso, phpUnit extenso)->
+	   Creación de componentes(LVL avanzado 22caps, 5hrs)->
+	   Curso de patrones de diseño(LVL avanzado 
+Styde Laravel->Crea un panel de control con Laravel(LVL intermedio 49caps, 11hrs)
+	     ->Tecnicas de autorización con Laravel(LVL intermedio 32caps 7hrs)
+	     ->Crea una aplicación con Laravel(LVL intermedio, haber hecho curso vue js, POO, aprenderé Integracion continua(IC)
+		webpack, Laravel Mix, TDD, y haremos un foro, 70caps, 13hrs)
+
+Styde->Curso de administración de servidores(Digital ocean para Deploy Laravel básico y avanzado 4.5hrs, deploy básico en 2hrs 1/2)->
+	Curso de Vue JS 2(LVL básico-intermedio,CRUD,Vue CLI,Webpack,SPA, Vuex, promesas, 52caps Y 8HRS 1/2, CRUD 2 1/2HRS)->
+	Testing Vue js(2hrs 45min Jest)
+
+Styde camino-> Laravel desde 0-> Curso de servidores
+				|-POO
+				|-Vue JS
+
+
+
